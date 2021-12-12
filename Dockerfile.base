@@ -1,0 +1,68 @@
+#  ベースイメージの設定
+FROM ubuntu:16.04
+# Nginx のインストール
+RUN apt-get -y update && apt-get -y upgrade 
+RUN apt-get -y install nginx
+
+#  ポート指定
+EXPOSE 80
+
+# Web コンテンツの配置
+ONBUILD ADD website.tar /var/www/html/
+
+# Nginx の実行
+CMD ["nginx", "-g", "daemon off;"]
+
+# STOPSIGNAL
+STOPSIGNAL SIGKILL
+
+# HELTHCHECK
+HEALTHCHECK --interval=5m --timeout=3s CMD curl -f http://localhost/ || exit 1
+
+# ENV
+ENV myName "Shinho ASA"
+ENV myOrder Gin Whisky Calvados
+ENV myNicName miya
+
+# WORKDIR
+WORKDIR /first
+WORKDIR second
+WORKDIR third
+
+RUN ["pwd"]
+
+
+ENV DIRPATH /cat
+ENV DIRNAME dog
+WORKDIR $DIRPATH/$DIRNAME
+RUN ["pwd"]
+
+RUN ["adduser", "asa"]
+RUN ["whoami"]
+USER asa
+RUN ["whoami"]
+
+
+LABEL maintainer="Shio ASA<asashiho@mail.asa.seoul>"
+LABEL title="WebAp"
+LABEL version="1.0"
+LABEL description="This is WebApplicationServer"
+
+ARG YOURNAME="asa"
+RUN echo $YOURNAME
+
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /docker_dir
+ADD host.html web/
+CMD ["cd", "web"]
+CMD ["pwd"]
+CMD ["ls", "-l"]
+ADD host.html /docker_dir/
+ADD hos* /docker_dir/
+ADD hos?.txt /docker_dir/
+
+ADD https://centos.org/index.html /docker_dir/web/
+
+
+
